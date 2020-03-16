@@ -10,20 +10,10 @@ def loadMst(numb):
 	matrix = []
 	with open('csv-mst/'+str(numb)+'.csv') as csvfile:
 		valreader = csv.reader(csvfile, delimiter=',')
-		counter = 0
 		for row in valreader:
-			counter += 1
-			if counter == 1:
-				continue
-			
-			cnt2=0
 			aRow = []
 			for x in row:
-				cnt2 += 1
-				if cnt2 == 1:
-					continue
-				aRow.append(0 if x=='' else float(x))
-
+				aRow.append(float(x))
 			matrix.append(aRow)
 	return matrix
 
@@ -66,6 +56,37 @@ def posToNodeTrace(G,pos):
 	        ),
 	        line_width=2))
 	return node_trace
+
+def posToNodeTraceWithIsolates(G,pos,isolates):
+	node_x = []
+	node_y = []
+	for node in G.nodes():
+		if node in isolates:
+			continue
+		x, y = pos[node]
+		node_x.append(x)
+		node_y.append(y)
+	# print(node_x,isolates)
+	# sys.exit()
+	node_trace = go.Scatter(
+	    x=node_x, y=node_y,
+	    mode='markers',
+	    hoverinfo='text',
+	    marker=dict(
+	        showscale=True,
+	        colorscale='YlGnBu',
+	        reversescale=True,
+	        color=[],
+	        size=10,
+	        colorbar=dict(
+	            thickness=15,
+	            title='Node Connections',
+	            xanchor='left',
+	            titleside='right'
+	        ),
+	        line_width=2))
+	return node_trace
+
 
 def posToEdgeTrace(G,pos):
 	edge_x = []
